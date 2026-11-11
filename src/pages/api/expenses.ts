@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { User } from "@prisma/client";
-import { Session } from "next-auth";
+import type { User } from "@prisma/client";
+import type { Session } from "next-auth";
 import { ExpensesService } from "./lib/services/expensesService";
 import { UsersService } from "./lib/services/usersService";
 import { GetExpensesSchema } from "./schemas/schemas";

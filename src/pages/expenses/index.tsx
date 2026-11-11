@@ -1,21 +1,16 @@
-import { Expense, ExpenseWithCategory } from '@/types/types';
+import type { ExpenseWithCategory } from '@/types/types';
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router';
 import Spinner from '@/components/Spinner';
 import { fetchExpenses } from '@/utils/api/expensesApi';
-import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
+import type { SelectChangeEvent} from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
 import { ExpenseDrawer } from '@/components/ExpenseDrawer';
-
-interface ExpensesTable extends Expense {
-  category: { name: string }
-}
 
 const AllExpensesPage = () => {
   const [expenses, setExpenses] = useState<ExpenseWithCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState<ExpenseWithCategory | null>(null);
-  const [expensesTotal, setExpensesTotal] = useState(0);
   const [currentMonth, setMonth] = useState(new Date().getMonth() + 1);
 
   const months = Array.from({ length: 12 }, (_, index) => ({

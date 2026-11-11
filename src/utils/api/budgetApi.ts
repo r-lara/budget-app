@@ -1,4 +1,4 @@
-import { Budget, BudgetWithCategory, BudgetWithCategoryAndExpenses } from "@/types/types";
+import type { Budget, BudgetWithCategory, BudgetWithCategoryAndExpenses } from "@/types/types";
 import { http } from "../http/http";
 
 

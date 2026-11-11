@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { CategoriesRepo } from "../repositories/categoriesRepo";
 import { ExpensesRepository } from "../repositories/expensesRepo";
-import { GetCategoriesSpentSchemaQuery, GetExpensesQuery } from "../../schemas/schemas";
+import type { GetCategoriesSpentSchemaQuery} from "../../schemas/schemas";
 
 export class CategoriesService {
   static async getUserCategories(user: User) {

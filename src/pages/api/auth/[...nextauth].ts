@@ -12,7 +12,7 @@ export const authOptions: AuthOptions = {
         username: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials, _req) {
         if (!credentials?.username) {
           return null;
         }
@@ -30,7 +30,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async redirect({url, baseUrl}) {
+    async redirect({baseUrl}) {
       return `${baseUrl}/`
     }
   },

@@ -1,22 +1,13 @@
 import RecentExpenses from "@/components/RecentExpenses";
-import { useEffect, useMemo, useState } from "react";
-import { BudgetWithCategoryAndExpenses, CategorySpending, Expense, ExpenseWithCategory } from "@/types/types";
+import { useEffect, useState } from "react";
+import type { CategorySpending, ExpenseWithCategory } from "@/types/types";
 import Spinner from "@/components/Spinner";
-import { fetchBudgetswithExpenses } from "@/utils/api/budgetApi";
-import { BudgetTable } from "@/components/BudgetTable";
-import { fetchExpenses, fetchExpensesTotalAmount } from "@/utils/api/expensesApi";
 import { ExpenseDrawer } from "@/components/ExpenseDrawer";
 import { CategoriesTable } from "@/components/CategoriesTable";
 import { fetchDashboardData } from "@/utils/api/dashboardApi";
-import { CategoryBudget } from "@/components/CategoryBudget";
-
-interface ExpensesTable extends Expense {
-  category: { name: string }
-}
 
 export default function Dashboard() {
   const [expenses, setExpenses] = useState<ExpenseWithCategory[]>([]);
-  const [budgetWithCategoryAndExpenses, setbudgetWithCategoryAndExpenses] = useState<BudgetWithCategoryAndExpenses[]>([]);
   const [categoriesWithTotalSpent, setCategoriesWithTotalSpent] = useState<CategorySpending[]>([]);
   const [totalExpensesAmount, setTotalExpensesAmount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -29,15 +20,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchDashboardData(currentMonth, currentYear).then((res) => {
-      setTotalExpensesAmount(res.totalExpenses);
-      setCategoriesWithTotalSpent(res.categories);
-      setExpenses(res.expenses)
+      setTotalExpensesAmount(res.totalAmount);
+      setCategoriesWithTotalSpent(res.categoriesWithExpenses);
+      setExpenses(res.lastFiveExpenses)
+      console.log(res);
     }).catch(console.error).finally(() => setLoading(false))
   }, [currentMonth, currentYear]);
 
   const handleExpenseCreated = (expense: ExpenseWithCategory) => {
     setExpenses(prev => [expense, ...prev]);
-    console.log(expense);
   };
 
   if (loading) {

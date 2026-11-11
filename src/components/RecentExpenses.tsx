@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import Spinner from './Spinner';
-import { Expense } from '@/types/types';
-import AddIcon from '@mui/icons-material/Add';
-import { Button } from '@mui/material';
-import Link from "next/link"
+import React from 'react';
+import type { Expense } from '@/types/types';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  Stack,
+  Typography,
+  Container,
+} from '@mui/material';
+import Link from 'next/link';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface ExpensesTable extends Expense {
   category: { name: string }
@@ -18,52 +27,62 @@ type ExpensesListProps = {
 const RecentExpenses: React.FC<ExpensesListProps> = ({ expenses, onAddExpense }) => {
 
   return (
-    <section className="px-4 py-1">
-      <div className="container m-auto max-w-2xl pb-4">
-        <div className='px-2 mb-4'>
-          <div className="flex flex-row justify-between items-center mb-2">
-            <h2 className="text-xl text-left font-semibold ">Recent Expenses</h2>
-            <Button onClick={onAddExpense}>
-              <AddIcon className="text-gray-600"></AddIcon>
-            </Button>
-          </div>
-          <ul role="list" className="space-y-4">
-            {expenses.map((expense, index) => (
-              <li key={index}>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-800">{expense.description}</h3>
-                    <p className="text-xs text-gray-600">{expense.category.name}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-gray-800">${expense.amount.toFixed(2)}</p>
-                    <p className="text-xs text-gray-600">{new Date(expense.date).toDateString()}</p>
-                  </div>
-                </div>
-                <hr />
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="mt-4">
-          {/* <Button
-            fullWidth
-            variant='outlined'
-            LinkComponent={Link}
-            href='/expenses'
-          >
-            See all expenses
-          </Button> */}
-          <Link
-            href="/expenses"
-            className="block w-full rounded border border-blue-500 py-2 text-center"
-          >
-            See all expenses
-          </Link>
-        </div>
-      </div>
-    </section>
-  )
-}
+    <Box component="section" sx={{ px: 1, py: 1 }}>
+      <Container maxWidth="sm" sx={{ m: 'auto', pb: 4 }}>
+        <Box sx={{ px: 1, mb: 4 }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <Typography variant="h6" sx={{ textAlign: 'left', fontWeight: 600 }}>
+              Recent Expenses
+            </Typography>
+            {/* <IconButton onClick={onAddExpense} aria-label="Add expense" size="small">
+              <AddIcon />
+            </IconButton> */}
+            <IconButton onClick={onAddExpense} aria-label="add expense" color="success" size='large'>
+              <AddCircleIcon />
+            </IconButton>
+          </Stack>
 
-export default RecentExpenses
+          <List disablePadding sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {expenses.map((expense, index) => (
+              <ListItem key={index} disableGutters disablePadding sx={{ display: 'block' }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                      {expense.description}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {expense.category.name}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ textAlign: 'right' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      ${expense.amount.toFixed(2)}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {new Date(expense.date).toDateString()}
+                    </Typography>
+                  </Box>
+                </Stack>
+                <Divider sx={{ mt: 1.5 }} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+
+        <Box sx={{ mt: 4 }}>
+          <Button
+            fullWidth
+            variant="outlined"
+            component={Link}
+            href="/expenses"
+          >
+            See all expenses
+          </Button>
+        </Box>
+      </Container>
+    </Box>
+  );
+};
+
+export default RecentExpenses;

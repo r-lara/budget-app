@@ -1,15 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Session } from "next-auth";
-import { CategoriesService } from "./lib/services/categoriesService";
+import type { Session } from "next-auth";
 import { UsersService } from "./lib/services/usersService";
-import { GetCategoriesSpentSchema, GetExpensesSchema } from "./schemas/schemas";
+import { GetExpensesSchema } from "./schemas/schemas";
 import { ExpensesService } from "./lib/services/expensesService";
+import type { User } from "@prisma/client";
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 type Handler = (req: AuthenticatedRequest, res: NextApiResponse) => Promise<void>;
 
 interface AuthenticatedRequest extends NextApiRequest {
   session: Session;
-  user?: any;
+  user: User;
 }
 
 const handlers: Record<HttpMethod, Handler> = {
@@ -23,13 +23,15 @@ const handlers: Record<HttpMethod, Handler> = {
       });
     }
     const query = parsed.data;
-    const [categories, expenses, totalExpenses] =  await Promise.all([
-      CategoriesService.getCategorySpending(req.user, query),
-      ExpensesService.getExpenses(req.user, query),
-      ExpensesService.getExpensesTotalAmount(req.user, query)
-    ]);
+    // const [categories, expenses, totalExpenses] =  await Promise.all([
+    //   CategoriesService.getCategorySpending(req.user, query),
+    //   ExpensesService.getExpenses(req.user, query),
+    //   ExpensesService.getExpensesTotalAmount(req.user, query)
+    // ]);
+    //Expenses from month with categories
+    const data = await ExpensesService.getExpensesDashboard(req.user, query);
 
-    res.status(200).send({categories, expenses, totalExpenses});
+    res.status(200).send(data);
   },
   POST: async (req: NextApiRequest, res: NextApiResponse) => {
     const data = req.body;

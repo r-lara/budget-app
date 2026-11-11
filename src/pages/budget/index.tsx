@@ -1,9 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Autocomplete, Button, TextField } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { createOrUpdateBudget, fetchBudgetswithExpenses } from '@/utils/api/budgetApi';
 import { fetchCategories } from '@/utils/api/categoriesApi';
 import Spinner from '@/components/Spinner';
-import { Category, BudgetWithCategory, BudgetWithCategoryAndExpenses } from '@/types/types';
+import type { Category, BudgetWithCategoryAndExpenses } from '@/types/types';
 import { CategoriesDialog } from '@/components/CategoriesDrawer';
 import { BudgetTable } from '@/components/BudgetTable';
 import { toast } from 'react-toastify';
@@ -18,7 +26,7 @@ const BudgetPage = () => {
   const currentMonth = currentDate.getMonth() + 1
   const currentYear = currentDate.getFullYear()
 
-  const fetchBudgetData = async () => {
+  const fetchBudgetData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -33,11 +41,11 @@ const BudgetPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentMonth, currentYear]);
 
   useEffect(() => {
     fetchBudgetData();
-  }, [currentMonth, currentYear]);
+  }, [fetchBudgetData]);
 
   useEffect(() => {
     fetchCategories()
@@ -94,12 +102,19 @@ const BudgetPage = () => {
   return (
     <>
       <BudgetTable budgets={budgetWithCategoryAndExpenses} />
-      <section className="px-4 mt-3 mb-3">
-        <div className="container m-auto max-w-2xl">
-          <form onSubmit={submitForm} className="mt-6 space-y-4">
-            <div className="flex flex-row justify-between items-baseline">
-              <h2 className="text-lg text-center font-semibold">Add a budget</h2>
-            </div>
+      <Box component="section" sx={{ px: 1, mt: 3, mb: 3, pb: { xs: 10, md: 0 } }}>
+        <Container maxWidth="sm" sx={{ m: 'auto', pb: { xs: 1, md: 0 } }}>
+          <Box
+            component="form"
+            onSubmit={submitForm}
+            sx={{ mt: 6, display: 'flex', flexDirection: 'column', gap: 2 }}
+          >
+            <Stack direction="row" justifyContent="space-between" alignItems="baseline">
+              <Typography variant="h6" textAlign="center" sx={{ fontWeight: 600 }}>
+                Add a budget
+              </Typography>
+            </Stack>
+
             <Autocomplete
               disablePortal
               options={categories}
@@ -110,7 +125,7 @@ const BudgetPage = () => {
                 ) || null
               }
               onChange={handleCategoryChange}
-              sx={{ width: "100%" }}
+              sx={{ width: '100%' }}
               renderInput={(params) => (
                 <TextField {...params} label="Select a category" />
               )}
@@ -125,19 +140,19 @@ const BudgetPage = () => {
               }
               fullWidth
               placeholder="0.00"
-              inputProps={{ step: "0.01" }}
+              inputProps={{ step: '0.01' }}
             />
 
-            <Button fullWidth variant="contained" type="submit">
+            <Button fullWidth variant="outlined" type="submit">
               Add / Update Budget
             </Button>
-          </form>
-        </div>
+          </Box>
+        </Container>
         <CategoriesDialog
           open={drawerOpen}
-          handleClose={() => setDrawerOpen(false)}>
-        </ CategoriesDialog>
-      </section>
+          handleClose={() => setDrawerOpen(false)}
+        />
+      </Box>
     </>
   );
 };

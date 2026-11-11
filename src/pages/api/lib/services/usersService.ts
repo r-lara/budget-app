@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { UsersRepo } from "../repositories/usersRepo";
-import { CategoriesService } from "./categoriesService";
 
 export class UsersService {
   static async getUserSession(req: NextApiRequest, res: NextApiResponse) {

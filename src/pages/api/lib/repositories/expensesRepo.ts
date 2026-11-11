@@ -1,12 +1,16 @@
-import { Expense } from "@/types/types";
-import { GetCategoriesSpentSchemaQuery, GetExpensesQuery } from "../../schemas/schemas";
+import type { Expense } from "@/types/types";
+import type { GetCategoriesSpentSchemaQuery, GetExpensesQuery } from "../../schemas/schemas";
 import { prisma } from "../prisma";
-import type { Expenses, User } from "@prisma/client";
+import type { User } from "@prisma/client";
+
+type Filters = {
+  date?: { gte: Date, lt: Date }
+}
 
 export class ExpensesRepository {
   static async getAllExpenses(user: User, queryParams: GetExpensesQuery) {
     const { year, month } = queryParams;
-    const filters: any = {};
+    const filters: Filters = {};
 
     if (month && year) {
       const startOfMonth = new Date(Date.UTC(year, month - 1, 1));
@@ -22,7 +26,7 @@ export class ExpensesRepository {
         id: "desc", 
       },
       where: { authorId: user.id, ...filters },
-      take: Number(queryParams.limit) || 100,
+      take: Number(queryParams.limit) || 1000,
       include: {
         category: true
       }
@@ -77,7 +81,7 @@ export class ExpensesRepository {
 
   static async getTotalExpensesGroupByMonth(user: User, queryParams: GetCategoriesSpentSchemaQuery) {
     const { year, month } = queryParams;
-    const filters: any = {};
+    const filters: Filters = {};
 
     if (month && year) {
       const startOfMonth = new Date(Date.UTC(year, month - 1, 1));

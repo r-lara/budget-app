@@ -1,4 +1,4 @@
-import { User, Categories } from "@prisma/client";
+import type { User} from "@prisma/client";
 import { prisma } from "../prisma";
 
 export class CategoriesRepo {

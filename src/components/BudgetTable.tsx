@@ -1,5 +1,4 @@
-import { BudgetWithCategoryAndExpenses, Expense } from "@/types/types"
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import type { BudgetWithCategoryAndExpenses, Expense } from "@/types/types"
 import { CategoryBudget } from "./CategoryBudget"
 // import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 

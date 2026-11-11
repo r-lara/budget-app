@@ -57,10 +57,11 @@ export type CategorySpending = {
   id: number;
   name: string;
   totalSpent: number;
+  expenses: Expense[];
 };
 
 export type DashboardResponse = {
-  totalExpenses: number;
-  categories: CategoryWithTotalSpent[];
-  expenses: ExpenseWithCategory[];
+  totalAmount: number;
+  categoriesWithExpenses: CategorySpending[];
+  lastFiveExpenses: ExpenseWithCategory[];
 }

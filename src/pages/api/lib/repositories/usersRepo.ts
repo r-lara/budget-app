@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { prisma } from "../prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { authOptions } from "../../auth/[...nextauth]";
 import bcrypt from "bcryptjs";
 import { DatabaseError } from "../errors/DatabaseError";

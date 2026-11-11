@@ -8,11 +8,13 @@ import Button from '@mui/material/Button';
 import MobileBottomNavigation from './MobileBottomNav';
 import LoginBtn from './LoginBtn';
 import { useSession } from 'next-auth/react';
+import { useKeyboardVisible } from '@/utils/hooks/useKeyboardVisible';
 
 const pages = [{ label: 'Home', href: '/' }, { label: 'Expenses', href: '/expenses' }, { label: 'Budget', href: '/budget' }];
 
 export default function DesktopAppBar() {
   const { data: session } = useSession();
+  const keyboardVisible = useKeyboardVisible();
 
   return (
     <>
@@ -91,7 +93,7 @@ export default function DesktopAppBar() {
           </Container>
         </AppBar>
       </Box>
-      {session && (
+      {session && !keyboardVisible && (
         <Box
           sx={{
             display: { xs: "block", md: "none" },
@@ -99,7 +101,9 @@ export default function DesktopAppBar() {
             bottom: 0,
             left: 0,
             right: 0,
+            zIndex: 1300,
             backgroundColor: "#fff",
+            boxShadow: "0 -1px 6px rgba(0,0,0,0.08)",
           }}
         >
           <MobileBottomNavigation />

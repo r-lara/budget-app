@@ -1,6 +1,6 @@
-import { Category, ExpenseWithCategory } from "@/types/types";
+import type { Category, ExpenseWithCategory } from "@/types/types";
 import { fetchCategories } from "@/utils/api/categoriesApi";
-import { Autocomplete, Box, Button, Drawer, InputAdornment, Stack, TextField } from "@mui/material"
+import { Autocomplete, Button, Drawer, Stack, TextField } from "@mui/material"
 import { useEffect, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import { createExpenseApi, updateExpenseApi } from "@/utils/api/expensesApi";
@@ -18,12 +18,11 @@ type ExpenseRequest = Omit<ExpenseWithCategory, "id" | "authorId" | "createdAt" 
 interface ExpenseDrawerProps {
   open: boolean
   onClose: () => void
-  onCreated: (res: any) => void
+  onCreated: (expense: ExpenseWithCategory) => void
   expenseToEdit?: ExpenseWithCategory | null
 }
 
 export const ExpenseDrawer: React.FC<ExpenseDrawerProps> = ({ open, onClose, onCreated, expenseToEdit }) => {
-  const [loading, setLoading] = useState(true);
   const [expense, setExpense] = useState<ExpenseFormState>({
     amount: "",
     description: "",
@@ -56,7 +55,9 @@ export const ExpenseDrawer: React.FC<ExpenseDrawerProps> = ({ open, onClose, onC
       console.log("response", response);
       if (response) {
         const categoryData = categories.find(cat => cat.id === response.expense.categoryId)
-        onCreated({ ...response.expense, category: categoryData })
+        if (categoryData) {
+          onCreated({ ...response.expense, category: categoryData })
+        }
       }
       clearForm()
     } catch (err) {
@@ -85,7 +86,6 @@ export const ExpenseDrawer: React.FC<ExpenseDrawerProps> = ({ open, onClose, onC
       .catch(err => {
         console.log(err)
       })
-      .finally(() => setLoading(false))
   }, [setCategories, setExpense])
 
   useEffect(() => {

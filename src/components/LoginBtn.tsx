@@ -1,8 +1,8 @@
-import { IconButton, Box, Tooltip, Avatar, Menu, MenuItem, Typography, Button } from "@mui/material";
-import { Session } from "next-auth";
+import { IconButton, Box, Tooltip, Avatar, Menu, MenuItem, Typography } from "@mui/material";
+import type { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 export default function LoginBtn(session: Session) {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);

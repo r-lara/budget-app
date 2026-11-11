@@ -1,4 +1,4 @@
-import { Expense, ExpenseWithCategory } from "@/types/types";
+import type { Expense, ExpenseWithCategory } from "@/types/types";
 import { http } from "../http/http";
 
 export const fetchExpenses = (month?: number, year?: number, limit?: number, totalAmount?: boolean) =>

@@ -1,4 +1,4 @@
-import { NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
 import { DatabaseError } from "../errors/DatabaseError";
 
 export function handleApiError(err: unknown, res: NextApiResponse) {

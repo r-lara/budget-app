@@ -1,7 +1,6 @@
 import type { User } from "@prisma/client"
 import { BudgetRepo } from "../repositories/budgetRepo"
 import { CategoriesRepo } from "../repositories/categoriesRepo"
-import { BudgetWithCategory } from "@/types/types"
 import type { CreateBudget, GetBudgetsQuery } from "../../schemas/schemas";
 
 export class BudgetService {

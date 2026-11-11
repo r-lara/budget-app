@@ -1,7 +1,5 @@
-import { AppBar, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Drawer, IconButton, Slide, Toolbar, Typography } from "@mui/material"
+import { Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material"
 import React, { useEffect, useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
-import { TransitionProps } from "@mui/material/transitions";
 
 interface CategoriesDrawerProps {
   open: boolean

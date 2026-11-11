@@ -146,6 +146,7 @@ export const ExpenseDrawer: React.FC<ExpenseDrawerProps> = ({ open, onClose, onC
                 onChange={(e) => setExpense({ ...expense, amount: e.target.value })}
                 value={expense?.amount}
                 type="number"
+                slotProps={{ htmlInput: { inputMode: "decimal", step: "0.01", min: 0 } }}
                 fullWidth
               />
               <TextField

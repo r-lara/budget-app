@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Resolved } from "@/test/types";
+import type { GetExpensesQuery } from "../../schemas/schemas";
 import type { User } from "@prisma/client";
 import { ExpensesService } from "./expensesService";
 import { ExpensesRepository } from "../repositories/expensesRepo";
@@ -21,9 +23,11 @@ beforeEach(() => {
 
 describe("ExpensesService", () => {
   it("getExpenses delegates to the repository with the same user/query", async () => {
-    const query = { month: 3, year: 2026, limit: 50 } as any;
+    const query: GetExpensesQuery = { month: 3, year: 2026, totalAmount: false, limit: 50 };
     const expected = [{ id: 1 }];
-    vi.mocked(ExpensesRepository.getAllExpenses).mockResolvedValue(expected as any);
+    vi.mocked(ExpensesRepository.getAllExpenses).mockResolvedValue(
+      expected as Resolved<typeof ExpensesRepository.getAllExpenses>
+    );
 
     const result = await ExpensesService.getExpenses(user, query);
 
@@ -32,7 +36,7 @@ describe("ExpensesService", () => {
   });
 
   it("getExpensesTotalAmount delegates to the repository with the same user/query", async () => {
-    const query = { month: 3, year: 2026 } as any;
+    const query: GetExpensesQuery = { month: 3, year: 2026, totalAmount: true };
     vi.mocked(ExpensesRepository.getTotalExpensesForMonth).mockResolvedValue(1234);
 
     const result = await ExpensesService.getExpensesTotalAmount(user, query);
@@ -43,8 +47,16 @@ describe("ExpensesService", () => {
 
   it("createExpense delegates to the repository with the same expense/user", async () => {
     const expense = { amount: 500, description: "Coffee", categoryId: 2 } as Expense;
-    const expected = { ...expense, id: 99 };
-    vi.mocked(ExpensesRepository.createExpense).mockResolvedValue(expected as any);
+    const expected: Resolved<typeof ExpensesRepository.createExpense> = {
+      id: 99,
+      amount: 500,
+      description: "Coffee",
+      categoryId: 2,
+      authorId: 1,
+      date: new Date(2026, 2, 1),
+      createdAt: new Date(2026, 2, 1),
+    };
+    vi.mocked(ExpensesRepository.createExpense).mockResolvedValue(expected);
 
     const result = await ExpensesService.createExpense(expense, user);
 
@@ -54,8 +66,16 @@ describe("ExpensesService", () => {
 
   it("updateExpense delegates to the repository with the same expense/user", async () => {
     const expense = { id: 99, amount: 700, description: "Lunch", categoryId: 2 } as Expense;
-    const expected = { ...expense };
-    vi.mocked(ExpensesRepository.updateExpense).mockResolvedValue(expected as any);
+    const expected: Resolved<typeof ExpensesRepository.updateExpense> = {
+      id: 99,
+      amount: 700,
+      description: "Lunch",
+      categoryId: 2,
+      authorId: 1,
+      date: new Date(2026, 2, 1),
+      createdAt: new Date(2026, 2, 1),
+    };
+    vi.mocked(ExpensesRepository.updateExpense).mockResolvedValue(expected);
 
     const result = await ExpensesService.updateExpense(expense, user);
 

@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { Resolved } from "@/test/types";
 import { UsersService } from "./usersService";
 import { UsersRepo } from "../repositories/usersRepo";
 
@@ -18,7 +20,9 @@ beforeEach(() => {
 describe("UsersService.registerUser", () => {
   it("creates the user when all fields are provided", async () => {
     const created = { id: 1, name: "Ada", email: "ada@example.com" };
-    vi.mocked(UsersRepo.createUser).mockResolvedValue(created as any);
+    vi.mocked(UsersRepo.createUser).mockResolvedValue(
+      created as Resolved<typeof UsersRepo.createUser>
+    );
 
     const result = await UsersService.registerUser("Ada", "ada@example.com", "secret");
 
@@ -58,7 +62,10 @@ describe("UsersService.getUser", () => {
   });
 
   it("returns the user with id coerced to a string when found", async () => {
-    vi.mocked(UsersRepo.getUser).mockResolvedValue({ id: 42, email: "ada@example.com" } as any);
+    vi.mocked(UsersRepo.getUser).mockResolvedValue({
+      id: 42,
+      email: "ada@example.com",
+    } as Resolved<typeof UsersRepo.getUser>);
 
     const result = await UsersService.getUser("ada@example.com");
 
@@ -77,10 +84,12 @@ describe("UsersService.getUser", () => {
 
 describe("UsersService.getUserSession", () => {
   it("delegates to the repository with the same req/res", async () => {
-    const req = {} as any;
-    const res = {} as any;
+    const req = {} as NextApiRequest;
+    const res = {} as NextApiResponse;
     const session = { id: 1 };
-    vi.mocked(UsersRepo.getUserSession).mockResolvedValue(session as any);
+    vi.mocked(UsersRepo.getUserSession).mockResolvedValue(
+      session as Resolved<typeof UsersRepo.getUserSession>
+    );
 
     const result = await UsersService.getUserSession(req, res);
 

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Resolved } from "@/test/types";
 import type { User } from "@prisma/client";
 import { BudgetService } from "./budgetService";
 import { BudgetRepo } from "../repositories/budgetRepo";
@@ -27,7 +28,9 @@ beforeEach(() => {
 describe("BudgetService.getUserBudgets", () => {
   it("fetches budgets with expenses for the given month/year when includeExpenses is true", async () => {
     const expected = [{ id: 1 }];
-    vi.mocked(BudgetRepo.getBudgetWithExpenses).mockResolvedValue(expected as any);
+    vi.mocked(BudgetRepo.getBudgetWithExpenses).mockResolvedValue(
+      expected as Resolved<typeof BudgetRepo.getBudgetWithExpenses>
+    );
 
     const result = await BudgetService.getUserBudgets(user, {
       month: 3,
@@ -45,7 +48,9 @@ describe("BudgetService.getUserBudgets", () => {
 
   it("falls back to plain budgets when includeExpenses is false", async () => {
     const expected = [{ id: 2 }];
-    vi.mocked(BudgetRepo.getBudgets).mockResolvedValue(expected as any);
+    vi.mocked(BudgetRepo.getBudgets).mockResolvedValue(
+      expected as Resolved<typeof BudgetRepo.getBudgets>
+    );
 
     const result = await BudgetService.getUserBudgets(user, {
       month: 3,
@@ -60,7 +65,9 @@ describe("BudgetService.getUserBudgets", () => {
 
   it("falls back to plain budgets when month/year are missing, even if includeExpenses is true", async () => {
     const expected = [{ id: 3 }];
-    vi.mocked(BudgetRepo.getBudgets).mockResolvedValue(expected as any);
+    vi.mocked(BudgetRepo.getBudgets).mockResolvedValue(
+      expected as Resolved<typeof BudgetRepo.getBudgets>
+    );
 
     const result = await BudgetService.getUserBudgets(user, {
       includeExpenses: true,
@@ -76,8 +83,12 @@ describe("BudgetService.createBudget", () => {
   it("upserts the budget when the category exists", async () => {
     const category = { id: 5, name: "Food" };
     const expected = { id: 10, monthlyLimit: 200, categoryId: 5 };
-    vi.mocked(CategoriesRepo.getCategory).mockResolvedValue(category as any);
-    vi.mocked(BudgetRepo.upsertBudget).mockResolvedValue(expected as any);
+    vi.mocked(CategoriesRepo.getCategory).mockResolvedValue(
+      category as Resolved<typeof CategoriesRepo.getCategory>
+    );
+    vi.mocked(BudgetRepo.upsertBudget).mockResolvedValue(
+      expected as Resolved<typeof BudgetRepo.upsertBudget>
+    );
 
     const result = await BudgetService.createBudget(user, {
       categoryId: 5,
